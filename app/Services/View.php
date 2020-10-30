@@ -8,10 +8,10 @@ class View
 {
 	/**
 	 * @param string $string
-	 * @param array  $tasks
+	 * @param array  $vars
 	 * @return mixed
 	 */
-	public static function create(string $string, $tasks = []) {
+	public static function create(string $string, $vars = []) {
 		$file = file_exists($_SERVER['DOCUMENT_ROOT'] . '/view/' . $string . '.engine.php');
 
 		if ($file) {
