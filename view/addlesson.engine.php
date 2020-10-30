@@ -11,41 +11,64 @@
 
 	<script>
 		function addLesson() {
-			var elems = $(".test-block");
-			var elemsTotal = elems.length;
-			for(var i=0; i<elemsTotal; ++i){
-				$(elems[i]).attr('id', i)
+			const elems      = $(".test-block");
+			const elemsTotal = elems.length;
+			let formFields   = [];
+			for (var i = 0; i < elemsTotal; ++i) {
+				let firstParam  = $(elems[i]).find(".first-param").val();
+				let secondParam = $(elems[i]).find(".second-param").val();
+				let output      = $(elems[i]).find(".output").val();
+				let variant      = $(elems[i]).find(".variant").val();
+				let students    = $(elems[i]).find(".students").val();
+				formFields[i]   = {
+					'firstParam':  firstParam,
+					'secondParam': secondParam,
+					'output':      output,
+					'students':    students,
+					'variant':    variant
+				}
 			}
-			console.log(elemsTotal);
+			let json = JSON.stringify(formFields);
+			$.ajax({
+				url:      '/mbou4260/lesson/start',         /* Куда пойдет запрос */
+				method:   'post',             /* Метод передачи (post или get) */
+				dataType: 'json',          /* Тип данных в ответе (xml, json, script, html). */
+				data:     {'result': json},     /* Параметры передаваемые в запросе. */
+				success:  function(data) {   /* функция которая будет выполнена после успешного запроса.  */
+					alert(data);            /* В переменной data содержится ответ от index.php. */
+				}
+			});
 		}
 
 		let variantNumber = 0;
+
 		function addVariant() {
-		$('#variants').append(
-			"<div class=\"test-block\" >" +
-			"<div class=\"row test-param-1\">" +
-			"	<div class=\"col-md-4 mb-3\">" +
-			"		<label for=\"firstName\">Первый параметр</label>" +
-			"		<input type=\"text\" class=\"form-control\" id=\"firstName\" placeholder=\"\" value=\"\" required=\"\">\n" +
-			"	</div>" +
-			"	<div class=\"col-md-4 mb-3\">" +
-			"		<label for=\"lastName\">Второй параметр</label>" +
-			"		<input type=\"text\" class=\"form-control\" id=\"lastName\" placeholder=\"\" value=\"\" required=\"\">" +
-			"	</div>" +
-			"	<div class=\"col-md-4 mb-3\">" +
-			"		<label for=\"address\">Выходной параметр</label>" +
-			"		<input type=\"text\" class=\"form-control\" id=\"address\"  required=\"\">" +
-			"	</div>" +
-			"</div>" +
-			"		<div class=\"form-group\">" +
-			"<label for=\"exampleFormControlSelect2\">Ученики</label>" +
-			"<select multiple class=\"form-control\" id=\"exampleFormControlSelect2\">" +
-			"	<option value=\"Daniil\">Даниил Сухорада</option>" +
-			"	<option value=\"Yra\">Юрий Пекарь</option>" +
-			"	<option value=\"Sergey\">Сергей Чазов</option>" +
-			"</select>\n		</div>" +
-			"</div>"
-		);
+			$('#variants').append(
+				"<div class=\"test-block\" >" +
+				"		<input type=\"hidden\" class=\"variant\" value=\"work"+variantNumber+"\" required=\"\">\n" +
+				"<div class=\"row test-param-1\">" +
+				"	<div class=\"col-md-4 mb-3\">" +
+				"		<label for=\"firstName\">Первый параметр</label>" +
+				"		<input type=\"text\" class=\"first-param\" value=\"\" required=\"\">\n" +
+				"	</div>" +
+				"	<div class=\"col-md-4 mb-3\">" +
+				"		<label for=\"lastName\">Второй параметр</label>" +
+				"		<input type=\"text\" class=\"second-param\" id=\"lastName\" placeholder=\"\" value=\"\" required=\"\">" +
+				"	</div>" +
+				"	<div class=\"col-md-4 mb-3\">" +
+				"		<label for=\"address\">Выходной параметр</label>" +
+				"		<input type=\"text\" class=\"output\" id=\"address\"  required=\"\">" +
+				"	</div>" +
+				"</div>" +
+				"		<div class=\"form-group\">" +
+				"<label for=\"exampleFormControlSelect2\">Ученики</label>" +
+				"<select multiple class=\"form-control students\">" +
+				"	<option value=\"Daniil\">Даниил Сухорада</option>" +
+				"	<option value=\"Yra\">Юрий Пекарь</option>" +
+				"	<option value=\"Sergey\">Сергей Чазов</option>" +
+				"</select>\n		</div>" +
+				"</div>"
+			);
 		}
 
 	</script>
@@ -67,10 +90,10 @@
 <body>
 <div class="col-md-8 order-md-1">
 	<h4 class="mb-3">Задание</h4>
-	<form class="needs-validation" >
-<div id="variants">
+	<form class="needs-validation">
+		<div id="variants">
 
-</div>
+		</div>
 		<a href="javascript:void(0)" onclick="addVariant(variantNumber++)">Добавить вариант</a>
 		<hr class="mb-4">
 		<a class="btn btn-primary" href="javascript:void(0)" onclick="addLesson()" role="button">Создать урок</a>

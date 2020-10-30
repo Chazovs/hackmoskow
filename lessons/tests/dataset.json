@@ -1,0 +1,50 @@
+{
+  "Daniil": {
+    "work1": {
+      "result": "sdfsdf",
+      "params": [
+        "sdfsdf",
+        "sdfsdf"
+      ]
+    }
+  },
+  "Yra": {
+    "work1": {
+      "result": "sdfsdf",
+      "params": [
+        "sdfsdf",
+        "sdfsdf"
+      ]
+    },
+    "work2": {
+      "result": "dfgdfg",
+      "params": [
+        "sdfgfsg",
+        "3434"
+      ]
+    },
+    "work3": {
+      "result": "sdfdf",
+      "params": [
+        "sdf",
+        "sdfsdf"
+      ]
+    }
+  },
+  "Sergey": {
+    "work1": {
+      "result": "sdfsdf",
+      "params": [
+        "sdfsdf",
+        "sdfsdf"
+      ]
+    },
+    "work3": {
+      "result": "sdfdf",
+      "params": [
+        "sdf",
+        "sdfsdf"
+      ]
+    }
+  }
+}
