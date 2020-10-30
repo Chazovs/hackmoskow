@@ -1,22 +1,19 @@
 <?php
+
 $data = [
-	"Daniel" => [
+	'Daniel' => [
 		'work' => [
 			'result' => 4,
-			[
-				4,
-				6,
-				7,
-				8
+			'params' => [
+				2,
+				2
 			]
 		],
 		'work1' => [
-			'result' => 4,
+			'result' => 10,
 			[
 				4,
-				6,
-				7,
-				8
+				6
 			]
 		],
 	],
