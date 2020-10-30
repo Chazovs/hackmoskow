@@ -29,7 +29,12 @@ class LessonController
      * @return mixed
      */
     public function test(){
-        var_dump($_GET);
-        return TestCode::testPHP('vasya', $input, $output);
+        $student = $_GET["student"];
+
+        $testCode = new TestCode();
+        var_dump($testCode->testPHP($student));
+        die();
+
+        return TestCode::testPHP($student);
     }
 }

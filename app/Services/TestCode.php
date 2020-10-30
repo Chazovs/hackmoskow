@@ -3,23 +3,47 @@
 namespace App\Services;
 
 Class TestCode {
-    static public function testPHP(string $student, array $input, mixed $output) : bool {
-        $path = '../testpath' . $student;
-        require_once($path);
+    const DATASET_PATH = '../lessons/tests/dataset.php';
 
-        $result = call_user_func_array('testcase', $input);
+    private $works;
 
-        if ($result == $output) {
+     public function testPHP(string $student) : bool {
+        $taskPath = '../lessons/users/' . $student . '/index.php';
+
+        if ($this->includeFile($taskPath) && $this->includeFile(self::DATASET_PATH)) {
+
+            $works = $data[$student];
+
+            var_dump(file_get_contents(self::DATASET_PATH));
+            foreach ($works as $work => $params) {
+                $result = call_user_func_array($work, $params['input']);
+                var_dump($result);
+
+                if ($result != $params['result']) {
+                    return false;
+                }
+            }
+
             return true;
         }
 
         return false;
     }
 
-    static public function testJS(string $student) : string {
+     public function testJS(string $student) : string {
         $path = '../testpath' . $student;
         require_once($path);
 
 
+    }
+
+    private function includeFile(string $path) : bool {
+        if (file_exists($path) && is_readable($path)) {
+            include_once $path;
+        } else {
+            return false;
+        }
+
+        return true;
     }
 }
