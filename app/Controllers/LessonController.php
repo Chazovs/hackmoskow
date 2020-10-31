@@ -50,17 +50,17 @@ class LessonController
 		return $this->addLessonFolders($result ?? []);
 	}
 
-    /**
-     * @return mixed
-     */
-    public function test(){
-        $student = $_GET["student"];
-        $testCode = new TestCode($student);
-        var_dump($testCode->testPHP());
-        die();
+	/**
+	 * @return mixed
+	 */
+	public function test() {
+		$student  = $_GET["student"];
+		$testCode = new TestCode($student);
+		var_dump($testCode->testPHP());
+		die();
 
-        return $testCode->testPHP();
-    }
+		return $testCode->testPHP();
+	}
 
 	/**
 	 * @param array $result
@@ -73,25 +73,59 @@ class LessonController
 				if (!mkdir($concurrentDirectory = $_SERVER['DOCUMENT_ROOT'] . '/lessons/users/' . $student, 0700) && !is_dir($concurrentDirectory)) {
 					throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
 				}
-				file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/lessons/users/' . $student . '/index.php', '');
 			}
 		}
 		$users = array_slice(scandir($_SERVER['DOCUMENT_ROOT'] . '/lessons/users/'), 2);
 
 		$usersWorks = [];
 		foreach ($users as $user) {
-			$works             = array_slice(scandir($_SERVER['DOCUMENT_ROOT'] . '/lessons/users/' . $user), 2);
-			$usersWorks[]=[
-				'name' => $user,
-				'works'=>$works
+			$works        = array_slice(scandir($_SERVER['DOCUMENT_ROOT'] . '/lessons/users/' . $user), 2);
+			$usersWorks[] = [
+				'name'  => $user,
+				'works' => $works
 			];
 		}
 
 		return json_encode($usersWorks) ?? '';
 	}
 
-	public function getWork(){
-		return file_get_contents($_SERVER['DOCUMENT_ROOT'].'/lessons/users/'.$_GET['user'].'/'.$_GET['work']);
+	public function showPanel(){
+
+		$contents = json_decode(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/lessons/tests/dataset.json'));
+
+		foreach ($contents as $key=>$user){
+			$works        = array_slice(scandir($_SERVER['DOCUMENT_ROOT'] . '/lessons/users/' . $key), 2);
+			$usersWorks[] = [
+				'name'  =>  $key,
+				'works' => $works
+			];
+		}
+
+		return json_encode($usersWorks) ?? [];
 	}
 
+	/**
+	 * @return false|string|string[]
+	 */
+	public function getWork() {
+		$content = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/lessons/users/' . $_GET['user'] . '/' . $_GET['work'], false, null, 5);
+		$content = str_replace(['{', '}', ';'], ['{ <br>', ' <br>}', ';<br>'], $content);
+		return $content;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function checkStart() {
+		if (file_exists($_SERVER['DOCUMENT_ROOT'] . '/lessons/tests/legend.json')) {
+			$content = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/lessons/tests/legend.json');
+			if (!empty($content) && $content !== []) {
+				return 1;
+			}
+
+			return 0;
+		}
+
+		return 0;
+	}
 }

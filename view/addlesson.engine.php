@@ -10,6 +10,8 @@
 		crossorigin="anonymous"></script>
 
 	<script>
+
+
 		function addLesson() {
 			const elems      = $(".test-block");
 			const elemsTotal = elems.length;
@@ -39,31 +41,50 @@
 					'result': json
 				},     /* Параметры передаваемые в запросе. */
 				success:  function(data) {   /* функция которая будет выполнена после успешного запроса.  */
+
 					if (data !== undefined) {
-						$('#lesson').hide();
-						let pannel = $('#pannel');
-
-						data.forEach(function(item, i, arr) {
-							let links='';
-							item.works.forEach(
-								function(work, u, allWorks) {
-									links += "<p><a class=\"btn btn-secondary\" href=\"/mbou4260/lesson/teacher/get/work?user="+item.name+"&work="+work+"\" role=\"button\">"+work+"</a></p>";
-								}
-							)
-
-							let userDiv = "			<div class=\"col-lg-4\">" +
-								"<img class=\"rounded-circle\" src=\"http://mc-rostov.ru/images/docmo/mo_nach/golubeva/%D0%BD%D0%B5%D1%82_%D1%84%D0%BE%D1%82%D0%BE.jpg\" alt=\"Generic placeholder image\" width=\"140\" height=\"140\">" +
-								"<h2>" + item.name + "</h2>" +
-								links +
-								"</div>"
-							pannel.append(userDiv);
-						});
-
-						pannel.show();
+						showStudents(data);
 					}
-
 				}
 			});
+		}
+
+		function showPannel(){
+			$.ajax({
+				url:      '/mbou4260/lesson/start/panel',         /* Куда пойдет запрос */
+				method:   'post',             /* Метод передачи (post или get) */
+				dataType: 'json',          /* Тип данных в ответе (xml, json, script, html). */
+				success:  function(data) {   /* функция которая будет выполнена после успешного запроса.  */
+					if (data !== undefined) {
+						showStudents(data);
+					}
+				}
+			});
+		}
+
+
+		function showStudents(data){
+			$('#lesson').hide();
+			let pannel = $('#pannel');
+
+			data.forEach(function(item, i, arr) {
+				let links='';
+				item.works.forEach(
+					function(work, u, allWorks) {
+						links += "<p><a class=\"btn btn-secondary\" href=\"/mbou4260/lesson/teacher/get/work?user="+item.name+"&work="+work+"\" role=\"button\">"+work+"</a></p>";
+					}
+				)
+
+				let userDiv = "			<div class=\"col-lg-4\">" +
+					"<img class=\"rounded-circle\" src=\"http://mc-rostov.ru/images/docmo/mo_nach/golubeva/%D0%BD%D0%B5%D1%82_%D1%84%D0%BE%D1%82%D0%BE.jpg\" alt=\"Generic placeholder image\" width=\"140\" height=\"140\">" +
+					"<h2>" + item.name + "</h2>" +
+					links +
+					"<a href='/mbou4260/lesson/test?student="+item.name+"'>Проверить задания</a>"+
+					"</div>"
+				pannel.append(userDiv);
+			});
+
+			pannel.show();
 		}
 
 		let variantNumber = 0;
@@ -99,6 +120,24 @@
 			);
 		}
 
+		document.addEventListener("DOMContentLoaded", () => {
+			$.ajax({
+				url:      '/mbou4260/lesson/start/check',         /* Куда пойдет запрос */
+				method:   'post',             /* Метод передачи (post или get) */
+				dataType: 'json',          /* Тип данных в ответе (xml, json, script, html). */
+				success:  function(data) {
+					if (data === 1) {
+						showPannel();
+						$('#lesson').hide();
+						$('#pannel').show();
+					} else {
+
+						$('#lesson').show();
+						$('#pannel').hide();
+					}
+				}
+			});
+		});
 	</script>
 
 	<!-- Latest compiled and minified CSS -->
@@ -120,7 +159,7 @@
 	<div class="row" id="pannel" hidden>
 
 	</div>
-	<div id="lesson">
+	<div id="lesson" hidden>
 		<h4 class="mb-3">Задание</h4>
 		<form class="needs-validation">
 
