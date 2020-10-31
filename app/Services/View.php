@@ -3,7 +3,10 @@
 
 namespace App\Services;
 
-
+/**
+ * Class View
+ * @package App\Services
+ */
 class View
 {
 	/**
@@ -15,9 +18,10 @@ class View
 		$file = file_exists($_SERVER['DOCUMENT_ROOT'] . '/view/' . $string . '.engine.php');
 
 		if ($file) {
-			$content = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/view/' . $string . '.engine.php');
+			ob_start();
+			extract($vars);
+			require $_SERVER['DOCUMENT_ROOT'] . '/view/' . $string . '.engine.php';
+			return ob_get_clean();
 		}
-
-		return $content;
 	}
 }

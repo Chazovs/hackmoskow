@@ -47,7 +47,7 @@ class LessonController
 		file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/lessons/tests/legend.json', json_encode($legends));
 		file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/lessons/tests/dataset.json', json_encode($result));
 
-		return $this->addLessonFolders($result);
+		return $this->addLessonFolders($result ?? []);
 	}
 
     /**
@@ -72,11 +72,11 @@ class LessonController
 
 	/**
 	 * @param array $result
-	 * @return array
+	 * @return false|string
 	 */
-	private function addLessonFolders(array $result): array {
+	private function addLessonFolders(array $result) {
 
-		foreach ($result as $student=>$data) {
+		foreach ($result as $student => $data) {
 			if (!is_dir($_SERVER['DOCUMENT_ROOT'] . '/lessons/users/' . $student)) {
 				if (!mkdir($concurrentDirectory = $_SERVER['DOCUMENT_ROOT'] . '/lessons/users/' . $student, 0700) && !is_dir($concurrentDirectory)) {
 					throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
@@ -84,7 +84,22 @@ class LessonController
 				file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/lessons/users/' . $student . '/index.php', '');
 			}
 		}
+		$users = array_slice(scandir($_SERVER['DOCUMENT_ROOT'] . '/lessons/users/'), 2);
 
-		return [];
+		$usersWorks = [];
+		foreach ($users as $user) {
+			$works             = array_slice(scandir($_SERVER['DOCUMENT_ROOT'] . '/lessons/users/' . $user), 2);
+			$usersWorks[]=[
+				'name' => $user,
+				'works'=>$works
+			];
+		}
+
+		return json_encode($usersWorks) ?? '';
 	}
+
+	public function getWork(){
+		return file_get_contents($_SERVER['DOCUMENT_ROOT'].'/lessons/users/'.$_GET['user'].'/'.$_GET['work']);
+	}
+
 }

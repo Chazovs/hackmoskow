@@ -18,16 +18,16 @@
 				let firstParam  = $(elems[i]).find(".first-param").val();
 				let secondParam = $(elems[i]).find(".second-param").val();
 				let output      = $(elems[i]).find(".output").val();
-				let variant      = $(elems[i]).find(".variant").val();
+				let variant     = $(elems[i]).find(".variant").val();
 				let students    = $(elems[i]).find(".students").val();
-				let legend    = $(elems[i]).find(".legend").val();
+				let legend      = $(elems[i]).find(".legend").val();
 				formFields[i]   = {
 					'firstParam':  firstParam,
 					'secondParam': secondParam,
 					'output':      output,
 					'students':    students,
-					'variant':    variant,
-					'legend':    legend,
+					'variant':     variant,
+					'legend':      legend
 				}
 			}
 			let json = JSON.stringify(formFields);
@@ -36,10 +36,32 @@
 				method:   'post',             /* Метод передачи (post или get) */
 				dataType: 'json',          /* Тип данных в ответе (xml, json, script, html). */
 				data:     {
-					'result': json,
+					'result': json
 				},     /* Параметры передаваемые в запросе. */
 				success:  function(data) {   /* функция которая будет выполнена после успешного запроса.  */
-					alert(data);            /* В переменной data содержится ответ от index.php. */
+					if (data !== undefined) {
+						$('#lesson').hide();
+						let pannel = $('#pannel');
+
+						data.forEach(function(item, i, arr) {
+							let links='';
+							item.works.forEach(
+								function(work, u, allWorks) {
+									links += "<p><a class=\"btn btn-secondary\" href=\"/mbou4260/lesson/teacher/get/work?user="+item.name+"&work="+work+"\" role=\"button\">"+work+"</a></p>";
+								}
+							)
+
+							let userDiv = "			<div class=\"col-lg-4\">" +
+								"<img class=\"rounded-circle\" src=\"http://mc-rostov.ru/images/docmo/mo_nach/golubeva/%D0%BD%D0%B5%D1%82_%D1%84%D0%BE%D1%82%D0%BE.jpg\" alt=\"Generic placeholder image\" width=\"140\" height=\"140\">" +
+								"<h2>" + item.name + "</h2>" +
+								links +
+								"</div>"
+							pannel.append(userDiv);
+						});
+
+						pannel.show();
+					}
+
 				}
 			});
 		}
@@ -49,9 +71,9 @@
 		function addVariant() {
 			$('#variants').append(
 				"<div class=\"test-block\" >" +
-				"<h5>Текст задания</h5>"+
-				"<textarea name=\"legend\" class=\"legend\" cols=\"100\" rows=\"3\"></textarea>"+
-				"		<input type=\"hidden\" class=\"variant\" value=\"work"+variantNumber+"\" required=\"\">\n" +
+				"<h5>Текст задания</h5>" +
+				"<textarea name=\"legend\" class=\"legend\" cols=\"100\" rows=\"3\"></textarea>" +
+				"		<input type=\"hidden\" class=\"variant\" value=\"work" + variantNumber + "\" required=\"\">\n" +
 				"<div class=\"row test-param-1\">" +
 				"	<div class=\"col-md-4 mb-3\">" +
 				"		<label for=\"firstName\">Первый параметр</label>" +
@@ -94,18 +116,22 @@
 	<title>Document</title>
 </head>
 <body>
-<div class="col-md-8 order-md-1">
-	<h4 class="mb-3">Задание</h4>
-	<form class="needs-validation">
+<div class="col-md-8 order-md-1" id="main">
+	<div class="row" id="pannel" hidden>
 
-		<div id="variants">
+	</div>
+	<div id="lesson">
+		<h4 class="mb-3">Задание</h4>
+		<form class="needs-validation">
 
-		</div>
-		<a href="javascript:void(0)" onclick="addVariant(variantNumber++)">Добавить вариант</a>
-		<hr class="mb-4">
-		<a class="btn btn-primary" href="javascript:void(0)" onclick="addLesson()" role="button">Создать урок</a>
-	</form>
+			<div id="variants">
 
+			</div>
+			<a href="javascript:void(0)" onclick="addVariant(variantNumber++)">Добавить вариант</a>
+			<hr class="mb-4">
+			<a class="btn btn-primary" href="javascript:void(0)" onclick="addLesson()" role="button">Создать урок</a>
+		</form>
+	</div>
 </div>
 </body>
 </html>
