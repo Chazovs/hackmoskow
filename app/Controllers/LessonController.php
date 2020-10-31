@@ -59,6 +59,8 @@ class LessonController
 	public function test() {
 		$student  = $_GET["student"];
 		$testCode = new TestCode($student);
+		var_dump($testCode->testPHP());
+		die();
 
 		return $testCode->testPHP();
 	}
@@ -72,6 +74,28 @@ class LessonController
 
 		return $testCode->testC();
 	}
+
+    /**
+     * @return mixed
+     */
+    public function testOnce() {
+        $student  = $_GET["student"];
+        $work = $_GET["work"];
+        $testCode = new TestCode($student, $work);
+
+        return $testCode->testPHP();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function cTestOnce() {
+        $student  = $_GET["student"];
+        $work = $_GET["work"];
+        $testCode = new TestCode($student, $work);
+
+        return $testCode->testC();
+    }
 
 	/**
 	 * @param array $result

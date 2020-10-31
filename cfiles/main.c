@@ -14,5 +14,5 @@ int main(int argc, char **argv)
 }
 
 float work(float arg1, float arg2) {
-    return arg1 + arg2;
+    return arg1 * arg2;
 }
