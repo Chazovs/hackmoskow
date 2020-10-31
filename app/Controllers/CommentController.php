@@ -13,16 +13,22 @@ class CommentController
 	 */
 	public function addComment(){
 
-		if (!is_dir($_SERVER['DOCUMENT_ROOT'] . '/lessons/comments/') && !mkdir($concurrentDirectory = $_SERVER['DOCUMENT_ROOT'] . '/lessons/comments/') && !is_dir($concurrentDirectory)) {
+		$c ='';
+		if (isset($_POST['lang']) && $_POST === 'cLang') {
+		    $c = 'c';
+		}
+
+
+		if (!is_dir($_SERVER['DOCUMENT_ROOT'] . '/'.$c.'lessons/comments/') && !mkdir($concurrentDirectory = $_SERVER['DOCUMENT_ROOT'] . '/'.$c.'lessons/comments/') && !is_dir($concurrentDirectory)) {
 			throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
 		}
 
-		if (!is_dir($_SERVER['DOCUMENT_ROOT'] . '/lessons/comments/'.$_POST['student'])
-			&& !mkdir($concurrentDirectory = $_SERVER['DOCUMENT_ROOT'] . '/lessons/comments/'.$_POST['student']) && !is_dir($concurrentDirectory)) {
+		if (!is_dir($_SERVER['DOCUMENT_ROOT'] . '/'.$c.'lessons/comments/'.$_POST['student'])
+			&& !mkdir($concurrentDirectory = $_SERVER['DOCUMENT_ROOT'] . '/'.$c.'lessons/comments/'.$_POST['student']) && !is_dir($concurrentDirectory)) {
 			throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
 		}
 
-		if ((bool) file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/lessons/comments/'.$_POST['student'].'/'.$_POST['work'], $_POST['comment'])) {
+		if ((bool) file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/'.$c.'lessons/comments/'.$_POST['student'].'/'.$_POST['work'], $_POST['comment'])) {
 		    return 'комментарий добавлен';
 		}
 
