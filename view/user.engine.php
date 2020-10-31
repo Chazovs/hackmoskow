@@ -34,8 +34,12 @@
                 	user: $(user).val()
                 },
                 success: function (data) {
-                    console.log(data);
+                    $('#result').html(data);
+                },
+                error: function (data){
+                    $('#result').html(data);
                 }
+
             })
         }
     </script>
@@ -55,6 +59,7 @@ foreach($datasetToSend as $task):?>
         <button type="button" class="btn btn-primary btn-sm" onclick="sendData('<?= $task['work']?>')" style="float: right;margin-top: 5px">Сохранить</button>
     </div>
 <?endforeach;?>
+<div id="result" style="width: 30%;padding-top: 5%;margin-left: auto;margin-right: auto"></div>
 <div style="margin-top: 50px;margin-left: auto;margin-right: auto;float: right;">
 <a type="button" class="btn btn-primary btn-sm" id="send" href="/mbou4260/lesson/test?student=<?= $task['user']?>">Отправить на проверку</a>
 </div>

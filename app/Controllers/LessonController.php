@@ -22,6 +22,10 @@ class LessonController
 		return View::create('addlesson');
 	}
 
+	public function addCplusLesson() {
+		return View::create('addCpluslesson');
+	}
+
 	/**
 	 * @return mixed
 	 */
@@ -47,10 +51,18 @@ class LessonController
 				}
 			}
 		}
-		file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/lessons/tests/legend.json', json_encode($legends));
-		file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/lessons/tests/dataset.json', json_encode($result));
 
-		return $this->addLessonFolders($result ?? []);
+		if (isset($_POST['languge']) && $_POST['languge'] === 'C++') {
+			file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/clessons/tests/legend.json', json_encode($legends));
+			file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/clessons/tests/dataset.json', json_encode($result));
+		}else{
+			file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/lessons/tests/legend.json', json_encode($legends));
+			file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/lessons/tests/dataset.json', json_encode($result));
+		}
+
+
+
+		return $this->addLessonFolders($result ?? [], true);
 	}
 
 	/**
@@ -101,22 +113,27 @@ class LessonController
 	 * @param array $result
 	 * @return false|string
 	 */
-	private function addLessonFolders(array $result) {
+	private function addLessonFolders(array $result, $cLang=false) {
+
+		$c ='';
+		if ($cLang) {
+		    $c = 'c';
+		}
 
 		foreach ($result as $student => $data) {
-			if (!is_dir($_SERVER['DOCUMENT_ROOT'] . '/lessons/users/' . $student)) {
-				if (!mkdir($concurrentDirectory = $_SERVER['DOCUMENT_ROOT'] . '/lessons/users/' . $student, 0700) && !is_dir($concurrentDirectory)) {
+			if (!is_dir($_SERVER['DOCUMENT_ROOT'] . '/'.$c.'lessons/users/' . $student)) {
+				if (!mkdir($concurrentDirectory = $_SERVER['DOCUMENT_ROOT'] . '/'.$c.'lessons/users/' . $student, 0700) && !is_dir($concurrentDirectory)) {
 					throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
 				}
 
 			}
 		}
-		$users = array_slice(scandir($_SERVER['DOCUMENT_ROOT'] . '/lessons/users/'), 2);
+		$users = array_slice(scandir($_SERVER['DOCUMENT_ROOT'] . '/'.$c.'lessons/users/'), 2);
 
 		$usersWorks = [];
 
 		foreach ($users as $user) {
-			$works        = array_slice(scandir($_SERVER['DOCUMENT_ROOT'] . '/lessons/users/' . $user), 2);
+			$works        = array_slice(scandir($_SERVER['DOCUMENT_ROOT'] . '/'.$c.'lessons/users/' . $user), 2);
 			$usersWorks[] = [
 				'name'  => $user,
 				'works' => $works
@@ -128,13 +145,18 @@ class LessonController
 
 	public function showPanel() {
 
-		if (file_exists($_SERVER['DOCUMENT_ROOT'] . '/lessons/tests/dataset.json')) {
+		$c ='';
+		if (isset($_POST['languge']) && $_POST['languge'] === 'C++') {
+			$c = 'c';
+		}
+
+		if (file_exists($_SERVER['DOCUMENT_ROOT'] . '/'.$c.'lessons/tests/dataset.json')) {
 			$contents = json_decode(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/lessons/tests/dataset.json'));
 		} else {
 			return [];
 		}
 
-		if (file_exists($_SERVER['DOCUMENT_ROOT'] . '/lessons/tests/dataset.json')) {
+		if (file_exists($_SERVER['DOCUMENT_ROOT'] . '/'.$c.'lessons/tests/dataset.json')) {
 			$legends = json_decode(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/lessons/tests/legend.json'));
 		} else {
 			return [];
@@ -150,7 +172,7 @@ class LessonController
 		}
 
 		foreach ($contents as $key => $user) {
-			$works        = array_slice(scandir($_SERVER['DOCUMENT_ROOT'] . '/lessons/users/' . $key), 2);
+			$works        = array_slice(scandir($_SERVER['DOCUMENT_ROOT'] . '/'.$c.'lessons/users/' . $key), 2);
 			$usersWorks[] = [
 				'name'  => $key,
 				'works' => $works
@@ -168,11 +190,19 @@ class LessonController
 	 * @return false|string|string[]
 	 */
 	public function getWork() {
-		$content = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/lessons/users/' . $_GET['user'] . '/' . $_GET['work'], false, null, 5);
+		$c ='';
+		$cInput = '';
+		if (isset($_GET['lang'])&& $_GET==='cPlus') {
+		    $c = 'c';
+		    $cInput = "<input type='hidden' name='lang' value='cLang'>";
+		}
+
+		$content = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/'.$c.'lessons/users/' . $_GET['user'] . '/' . $_GET['work'], false, null, 5);
 		$content = str_replace(['{', '}', ';'], ['{ <br>', ' <br>}', ';<br>'], $content);
 		$content .= "<br><br><form action=\"/add/comment\" method='post'>
 	<textarea name='comment'  cols='30' rows='10' placeholder='Оставить комментарий'></textarea><br>
 	<input type='hidden' name='student' value='".$_GET['user']."'>
+	".$cInput."
 	<input type='hidden' name='work' value='".$_GET['work']."'>
 <button>Отправить</button>
 </form>";
@@ -183,8 +213,12 @@ class LessonController
 	 * @return bool
 	 */
 	public function checkStart() {
-		if (file_exists($_SERVER['DOCUMENT_ROOT'] . '/lessons/tests/dataset.json')) {
-			$content = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/lessons/tests/dataset.json');
+		$c ='';
+		if (isset($_POST['languge']) && $_POST['languge'] === 'C++') {
+			$c = 'c';
+		}
+		if (file_exists($_SERVER['DOCUMENT_ROOT'] . '/'.$c.'lessons/tests/dataset.json')) {
+			$content = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/'.$c.'lessons/tests/dataset.json');
 			if (!empty($content) && $content !== []) {
 				return 1;
 			}

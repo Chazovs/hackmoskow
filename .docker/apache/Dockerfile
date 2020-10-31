@@ -4,7 +4,7 @@ RUN a2enmod rewrite
 
 RUN set -xe \
     && apt-get update \
-    && apt-get install -y --no-install-recommends git gcc wget unzip zip imagemagick libpng-dev libjpeg-dev \
+    && apt-get install -y --no-install-recommends git gcc wget unzip imagemagick libpng-dev libjpeg-dev \
         libfreetype6-dev default-mysql-client libmcrypt-dev libicu-dev libxml2 libxml2-dev libmagickwand-dev \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr --with-freetype-dir=/usr \

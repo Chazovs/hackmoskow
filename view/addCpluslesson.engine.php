@@ -34,13 +34,14 @@
 			}
 			let json = JSON.stringify(formFields);
 			$.ajax({
-				url:      '/mbou4260/lesson/start',         /* Куда пойдет запрос */
-				method:   'post',             /* Метод передачи (post или get) */
-				dataType: 'json',          /* Тип данных в ответе (xml, json, script, html). */
+				url:      '/mbou4260/lesson/start',
+				method:   'post',
+				dataType: 'json',
 				data:     {
-					'result': json
-				},     /* Параметры передаваемые в запросе. */
-				success:  function(data) {   /* функция которая будет выполнена после успешного запроса.  */
+					'result': json,
+					'languge': 'C++',
+				},
+				success:  function(data) {
 
 					if (data !== undefined) {
 						showStudents(data);
@@ -51,7 +52,7 @@
 
 		function showLegend(legend) {
 			legends = '';
-console.log(legend);
+			console.log(legend);
 			legend.forEach(
 				function(legend, key, allWorks) {
 					legends += "<br><p>"+legend.task+"<br>";
@@ -63,10 +64,13 @@ console.log(legend);
 
 		function showPannel(){
 			$.ajax({
-				url:      '/mbou4260/lesson/start/panel',         /* Куда пойдет запрос */
-				method:   'post',             /* Метод передачи (post или get) */
-				dataType: 'json',          /* Тип данных в ответе (xml, json, script, html). */
-				success:  function(data) {   /* функция которая будет выполнена после успешного запроса.  */
+				url:      '/mbou4260/lesson/start/panel',
+				method:   'post',
+				dataType: 'json',
+				data:     {
+					'languge': 'C++',
+				},
+				success:  function(data) {
 					if (data !== undefined) {
 						showStudents(data.dataset);
 						showLegend(data.legenda);
@@ -86,7 +90,7 @@ console.log(legend);
 				let links='';
 				item.works.forEach(
 					function(work, u, allWorks) {
-						links += "<p><a class=\"btn btn-secondary\" href=\"/mbou4260/lesson/teacher/get/work?user="+item.name+"&work="+work+"\" role=\"button\">"+work+"</a></p>";
+						links += "<p><a class=\"btn btn-secondary\" href=\"/mbou4260/lesson/teacher/get/work?lang=cPlus&user="+item.name+"&work="+work+"\" role=\"button\">"+work+"</a></p>";
 					}
 				)
 
@@ -140,7 +144,11 @@ console.log(legend);
 				url:      '/mbou4260/lesson/start/check',         /* Куда пойдет запрос */
 				method:   'post',             /* Метод передачи (post или get) */
 				dataType: 'json',          /* Тип данных в ответе (xml, json, script, html). */
+				data:     {
+					'languge': 'C++',
+				},
 				success:  function(data) {
+					console.log(data);
 					if (data === 1) {
 						showPannel();
 						$('#lesson').hide();
@@ -157,15 +165,15 @@ console.log(legend);
 
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-	      crossorigin="anonymous">
+		  crossorigin="anonymous">
 
 	<!-- Optional theme -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
-	      crossorigin="anonymous">
+		  crossorigin="anonymous">
 
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-	        crossorigin="anonymous"></script>
+			crossorigin="anonymous"></script>
 
 	<title>Document</title>
 </head>

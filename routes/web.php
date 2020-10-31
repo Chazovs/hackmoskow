@@ -19,6 +19,9 @@ Route::make('/add/comment', 'POST', 'CommentController', 'addComment');
 Route::make('/download/lesson', 'GET', 'LessonController', 'downloadLesson');
 Route::make('/', 'GET', 'MainController', 'index');
 Route::make('/mbou4260/lesson/users', 'GET', 'StudentsController', 'listUsers');
+Route::make('/mbou4260/lesson/users/cplus', 'GET', 'StudentsController', 'listCUsers');
 Route::make('/mbou4260/lesson/users/work', 'GET', 'StudentsController', 'viewUsers');
+Route::make('/mbou4260/lesson/users/cwork', 'GET', 'StudentsController', 'viewCUsers');
 Route::make('/mbou4260/lesson/users/work/save', 'POST', 'StudentsController', 'saveToFile');
+Route::make('/mbou4260/lesson/add/cplus', 'GET', 'LessonController', 'addCplusLesson');
 

@@ -7,7 +7,11 @@
 	<title>Document</title>
 </head>
 <body>
-<a href="/mbou4260/lesson/add">Личный кабинет учителя</a>
-<a href="/mbou4260/lesson/users">Страница для всех учеников</a>
+<h4>Кабинет учителя</h4>
+<p><a href="/mbou4260/lesson/add">Урок на PHP</a></p>
+<p><a href="/mbou4260/lesson/add/cplus">Урок на C</a></p>
+<h4>Кабинет ученика</h4>
+<p><a href="/mbou4260/lesson/users">Урок по PHP</a></p>
+<p><a href="/mbou4260/lesson/users/cplus">Урок по C</a></p>
 </body>
 </html>
