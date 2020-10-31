@@ -1,3 +1,5 @@
 /vendor/
 .idea
 /lessons/tests/dataset.json
+/lessons/tests/legend.php
+/lessons/users/
