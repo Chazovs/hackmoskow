@@ -49,6 +49,18 @@
 			});
 		}
 
+		function showLegend(legend) {
+			legends = '';
+console.log(legend);
+			legend.forEach(
+				function(legend, key, allWorks) {
+					legends += "<br><p>"+legend.task+"<br>";
+					legends += legend.description+"</p>";
+				});
+			let pannel = $('#pannel');
+			pannel.append(legends);
+		}
+
 		function showPannel(){
 			$.ajax({
 				url:      '/mbou4260/lesson/start/panel',         /* Куда пойдет запрос */
@@ -56,7 +68,10 @@
 				dataType: 'json',          /* Тип данных в ответе (xml, json, script, html). */
 				success:  function(data) {   /* функция которая будет выполнена после успешного запроса.  */
 					if (data !== undefined) {
-						showStudents(data);
+						showStudents(data.dataset);
+						showLegend(data.legenda);
+					}else {
+						console.log('нет датасета')
 					}
 				}
 			});
