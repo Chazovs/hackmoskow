@@ -51,12 +51,11 @@ class LessonController
      */
     public function test(){
         $student = $_GET["student"];
-
-        $testCode = new TestCode();
-        var_dump($testCode->testPHP($student));
+        $testCode = new TestCode($student);
+        var_dump($testCode->testPHP());
         die();
 
-        return TestCode::testPHP($student);
+        return $testCode->testPHP();
     }
 
 	/**

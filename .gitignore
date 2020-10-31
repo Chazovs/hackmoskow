@@ -1,3 +1,4 @@
 /vendor/
 .idea
 /lessons/tests/dataset.json
+/lessons/users

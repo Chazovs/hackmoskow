@@ -3,23 +3,30 @@
 namespace App\Services;
 
 Class TestCode {
-    const DATASET_PATH = '../lessons/tests/dataset.php';
+    const DATASET_PATH = '../lessons/tests/dataset.json';
 
     private $works;
+    private $student;
 
-     public function testPHP(string $student) : bool {
-        $taskPath = '../lessons/users/' . $student . '/index.php';
+    public function __construct(string $student)
+    {
+        $this->student = $student;
+    }
 
-        if ($this->includeFile($taskPath) && $this->includeFile(self::DATASET_PATH)) {
+    public function testPHP() : bool {
+        $taskPathTmp = '../lessons/users/' . $this->student . '/';
 
-            $works = $data[$student];
+        if ($this->getFileContent(self::DATASET_PATH)) {
+            foreach ($this->works as $work => $params) {
+                $taskPath = $taskPathTmp . $work . '.php';
 
-            var_dump(file_get_contents(self::DATASET_PATH));
-            foreach ($works as $work => $params) {
-                $result = call_user_func_array($work, $params['input']);
-                var_dump($result);
+                if ($this->includeFile($taskPath)) {
+                    $result = call_user_func_array($work, $params['params']);
 
-                if ($result != $params['result']) {
+                    if ($result != $params['result']) {
+                        return false;
+                    }
+                } else {
                     return false;
                 }
             }
@@ -30,8 +37,8 @@ Class TestCode {
         return false;
     }
 
-     public function testJS(string $student) : string {
-        $path = '../testpath' . $student;
+     public function testJS() : string {
+        $path = '../testpath';
         require_once($path);
 
 
@@ -40,6 +47,17 @@ Class TestCode {
     private function includeFile(string $path) : bool {
         if (file_exists($path) && is_readable($path)) {
             include_once $path;
+        } else {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function getFileContent(string $path) : bool {
+        if (file_exists($path) && is_readable($path)) {
+            $works = json_decode(file_get_contents($path), true);
+            $this->works = $works[$this->student];
         } else {
             return false;
         }
