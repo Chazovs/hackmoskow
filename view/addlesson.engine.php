@@ -20,12 +20,14 @@
 				let output      = $(elems[i]).find(".output").val();
 				let variant      = $(elems[i]).find(".variant").val();
 				let students    = $(elems[i]).find(".students").val();
+				let legend    = $(elems[i]).find(".legend").val();
 				formFields[i]   = {
 					'firstParam':  firstParam,
 					'secondParam': secondParam,
 					'output':      output,
 					'students':    students,
-					'variant':    variant
+					'variant':    variant,
+					'legend':    legend,
 				}
 			}
 			let json = JSON.stringify(formFields);
@@ -33,7 +35,9 @@
 				url:      '/mbou4260/lesson/start',         /* Куда пойдет запрос */
 				method:   'post',             /* Метод передачи (post или get) */
 				dataType: 'json',          /* Тип данных в ответе (xml, json, script, html). */
-				data:     {'result': json},     /* Параметры передаваемые в запросе. */
+				data:     {
+					'result': json,
+				},     /* Параметры передаваемые в запросе. */
 				success:  function(data) {   /* функция которая будет выполнена после успешного запроса.  */
 					alert(data);            /* В переменной data содержится ответ от index.php. */
 				}
@@ -45,6 +49,8 @@
 		function addVariant() {
 			$('#variants').append(
 				"<div class=\"test-block\" >" +
+				"<h5>Текст задания</h5>"+
+				"<textarea name=\"legend\" class=\"legend\" cols=\"100\" rows=\"3\"></textarea>"+
 				"		<input type=\"hidden\" class=\"variant\" value=\"work"+variantNumber+"\" required=\"\">\n" +
 				"<div class=\"row test-param-1\">" +
 				"	<div class=\"col-md-4 mb-3\">" +
@@ -91,6 +97,7 @@
 <div class="col-md-8 order-md-1">
 	<h4 class="mb-3">Задание</h4>
 	<form class="needs-validation">
+
 		<div id="variants">
 
 		</div>

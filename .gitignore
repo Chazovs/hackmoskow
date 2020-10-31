@@ -1,4 +1,6 @@
 /vendor/
 .idea
 /lessons/tests/dataset.json
-/lessons/users
+/lessons/tests/legend.php
+/lessons/users/
+
