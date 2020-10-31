@@ -56,10 +56,18 @@ class LessonController
     public function test(){
         $student = $_GET["student"];
         $testCode = new TestCode($student);
-        var_dump($testCode->testPHP());
-        die();
 
         return $testCode->testPHP();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function cTest(){
+        $student = $_GET["student"];
+        $testCode = new TestCode($student);
+
+        return $testCode->testC();
     }
 
 	/**
