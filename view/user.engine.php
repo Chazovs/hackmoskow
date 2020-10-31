@@ -56,7 +56,7 @@ foreach($datasetToSend as $task):?>
     </div>
 <?endforeach;?>
 <div style="margin-top: 50px;margin-left: auto;margin-right: auto;float: right;">
-<button type="button" class="btn btn-primary btn-sm" id="send" onclick="send('<?= $task['work']?>')">Отправить на проверку</button>
+<a type="button" class="btn btn-primary btn-sm" id="send" href="/mbou4260/lesson/test?student=<?= $task['user']?>">Отправить на проверку</a>
 </div>
 </body>
 </html>
