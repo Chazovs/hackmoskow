@@ -2,109 +2,101 @@
 
 namespace App\Services;
 
-use ErrorException;
+Class TestCode {
+    const DATASET_PATH = '../lessons/tests/dataset.json';
+    const DATASET_C_PATH = '../clessons/tests/dataset.json';
+    const MAIN_C_FILE_PATH = '../cfiles/main.c';
+    const TEMPLATE_C_FILE_PATH = '../cfiles/ctemplate';
 
-class TestCode
-{
-	const DATASET_PATH     = '../lessons/tests/dataset.json';
-	const MAIN_C_FILE_PATH = '../cfiles/main.c';
+    private $works;
+    private $student;
 
-	private $works;
-	private $student;
+    public function __construct(string $student)
+    {
+        $this->student = $student;
+    }
 
-	public function __construct(string $student) {
-		$this->student = $student;
-	}
+    public function testPHP() {
+        $taskPathTmp = '../lessons/users/' . $this->student . '/';
+        $testResult = array();
 
-	public function testPHP() {
-		$taskPathTmp = '../lessons/users/' . $this->student . '/';
-		$testResult = [];
+        if ($this->getFileContent(self::DATASET_PATH)) {
+            foreach ($this->works as $work => $params) {
+                $taskPath = $taskPathTmp . $work . '.php';
 
-		if ($this->getFileContent(self::DATASET_PATH)) {
-			foreach ($this->works as $work => $params) {
-				$taskPath = $taskPathTmp . $work . '.php';
+                if ($this->includeFile($taskPath)) {
+                    $result = call_user_func_array($work, $params['params']);
+                    $testResult[$work] = $result == $params['result'];
+                } else {
+                    return false;
+                }
+            }
 
-				if ($this->includeFile($taskPath)) {
-					try {
-						set_error_handler(function($errno, $errstr, $errfile, $errline, $errcontext) {
-							if (0 === error_reporting()) {
-								return false;
-							}
+            return json_encode($testResult);
+        }
 
-							throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
-						});
-						$result = call_user_func_array($work, $params['params']);
-					} catch (ErrorException $exception) {
+        return false;
+    }
 
-						return 'метод не найден в файле';
-					}
+    public function testC() {
+        $taskPathTmp = '../clessons/users/' . $this->student . '/';
+        $testResult = array();
 
-					$testResult[$work] = $result == $params['result'];
-				} else {
-					return false;
-				}
-			}
+        if ($this->getFileContent(self::DATASET_C_PATH)) {
+            foreach ($this->works as $work => $params) {
+                $taskPath = $taskPathTmp . $work;
 
-			return json_encode($testResult);
-		}
+                if ($this->filePutContent($taskPath)) {
+                    exec('cd ../cfiles/ && make compile');
 
-		return false;
-	}
+                    $arg1 = $params['params'][0];
+                    $arg2 = $params['params'][1];
 
-	public function testC() {
-		exec("../cfiles/work 1 2", $out);
+                    exec("../cfiles/work $arg1 $arg2", $out);
 
-		$taskPathTmp = '../clessons/users/' . $this->student . '/';
-		$testResult  = [];
+                    $testResult[$work] = (float)$out[0] == $params['result'];
+                } else {
+                    return false;
+                }
+            }
 
-		if ($this->getFileContent(self::DATASET_PATH)) {
-			foreach ($this->works as $work => $params) {
-				$taskPath = $taskPathTmp . $work;
+            return json_encode($testResult);
+        }
 
-				if ($this->filePutContent($taskPath)) {
-					die();
-					$result            = call_user_func_array($work, $params['params']);
-					$testResult[$work] = $result == $params['result'];
-				} else {
-					return false;
-				}
-			}
+        return false;
+    }
 
-			return json_encode($testResult);
-		}
+    private function includeFile(string $path) : bool {
+        if (file_exists($path) && is_readable($path)) {
+            include_once $path;
+        } else {
+            return false;
+        }
 
-		return false;
-	}
+        return true;
+    }
 
-	private function includeFile(string $path): bool {
-		if (file_exists($path) && is_readable($path)) {
-			include_once $path;
-		} else {
-			return false;
-		}
+    private function getFileContent(string $path) : bool {
+        if (file_exists($path) && is_readable($path)) {
+            $works = json_decode(file_get_contents($path), true);
+            $this->works = $works[$this->student];
+        } else {
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	private function getFileContent(string $path): bool {
-		if (file_exists($path) && is_readable($path)) {
-			$works       = json_decode(file_get_contents($path), true);
-			$this->works = $works[$this->student];
-		} else {
-			return false;
-		}
+    private function filePutContent(string $path) : bool {
+        if (file_exists($path) && is_readable($path)) {
+            $template = file_get_contents(self::TEMPLATE_C_FILE_PATH);
+            $work = file_get_contents($path);
+            file_put_contents(self::MAIN_C_FILE_PATH, $template);
+            file_put_contents(self::MAIN_C_FILE_PATH, $work, FILE_APPEND);
+        } else {
+            return false;
+        }
 
-		return true;
-	}
-
-	private function filePutContent(string $path): bool {
-		if (file_exists($path) && is_readable($path)) {
-			$work = file_get_contents($path);
-			file_put_contents(SELF::MAIN_C_FILE_PATH, $work, FILE_APPEND);
-		} else {
-			return false;
-		}
-
-		return true;
-	}
+        return true;
+    }
 }
