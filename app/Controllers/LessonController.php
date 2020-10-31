@@ -44,7 +44,7 @@ class LessonController
 				}
 			}
 		}
-		file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/lessons/tests/legend.php', json_encode($legends));
+		file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/lessons/tests/legend.json', json_encode($legends));
 		file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/lessons/tests/dataset.json', json_encode($result));
 
 		return $this->addLessonFolders($result);
