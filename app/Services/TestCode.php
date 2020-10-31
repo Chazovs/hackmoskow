@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use ErrorException;
+
 Class TestCode {
     const DATASET_PATH = '../lessons/tests/dataset.json';
     const MAIN_C_FILE_PATH = '../cfiles/main.c';
@@ -23,7 +25,20 @@ Class TestCode {
                 $taskPath = $taskPathTmp . $work . '.php';
 
                 if ($this->includeFile($taskPath)) {
-                    $result = call_user_func_array($work, $params['params']);
+					try {
+						set_error_handler(function($errno, $errstr, $errfile, $errline, $errcontext) {
+							if (0 === error_reporting()) {
+								return false;
+							}
+
+							throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+						});
+						$result = call_user_func_array($work, $params['params']);
+					}catch (ErrorException $exception){
+
+						return 'метод не найден в файле';
+					}
+
                     $testResult[$work] = $result == $params['result'];
                 } else {
                     return false;

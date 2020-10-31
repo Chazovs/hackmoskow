@@ -57,6 +57,8 @@
 				success:  function(data) {   /* функция которая будет выполнена после успешного запроса.  */
 					if (data !== undefined) {
 						showStudents(data);
+					}else {
+						console.log('нет датасета')
 					}
 				}
 			});
