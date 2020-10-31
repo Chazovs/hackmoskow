@@ -50,18 +50,17 @@ class LessonController
 		return $this->addLessonFolders($result ?? []);
 	}
 
-	/**
-	 * @return mixed
-	 */
-	public function test() {
-		$student = $_GET["student"];
+    /**
+     * @return mixed
+     */
+    public function test(){
+        $student = $_GET["student"];
+        $testCode = new TestCode($student);
+        var_dump($testCode->testPHP());
+        die();
 
-		$testCode = new TestCode();
-		var_dump($testCode->testPHP($student));
-		die();
-
-		return TestCode::testPHP($student);
-	}
+        return $testCode->testPHP();
+    }
 
 	/**
 	 * @param array $result
