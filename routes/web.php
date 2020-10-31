@@ -12,4 +12,5 @@ Route::make('/mbou4260/lesson/start/check', 'POST', 'LessonController', 'checkSt
 Route::make('/mbou4260/lesson/start/panel', 'POST', 'LessonController', 'showPanel');
 Route::make('/add/comment', 'POST', 'CommentController', 'addComment');
 Route::make('/download/lesson', 'GET', 'LessonController', 'downloadLesson');
+Route::make('/', 'GET', 'MainController', 'index');
 

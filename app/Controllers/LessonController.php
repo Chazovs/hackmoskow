@@ -110,6 +110,21 @@ class LessonController
 			return [];
 		}
 
+		if (file_exists($_SERVER['DOCUMENT_ROOT'] . '/lessons/tests/dataset.json')) {
+			$legends = json_decode(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/lessons/tests/legend.json'));
+		} else {
+			return [];
+		}
+
+		$legendsAr =[];
+
+		foreach ($legends as $key => $legend) {
+			$legendsAr[] = [
+				'task'        => $key,
+				'description' => $legend
+			];
+		}
+
 		foreach ($contents as $key => $user) {
 			$works        = array_slice(scandir($_SERVER['DOCUMENT_ROOT'] . '/lessons/users/' . $key), 2);
 			$usersWorks[] = [
@@ -118,7 +133,11 @@ class LessonController
 			];
 		}
 
-		return json_encode($usersWorks) ?? [];
+		return json_encode(
+			[
+			'dataset'=>	$usersWorks,
+			'legenda'=>	$legendsAr
+			]) ?? [];
 	}
 
 	/**
