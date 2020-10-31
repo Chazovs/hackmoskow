@@ -81,7 +81,7 @@ class LessonController
 
 		foreach ($result as $student => $data) {
 			if (!is_dir($_SERVER['DOCUMENT_ROOT'] . '/lessons/users/' . $student)) {
-				if (!mkdir($concurrentDirectory = $_SERVER['DOCUMENT_ROOT'] . '/lessons/users/' . $student, 0700) && !is_dir($concurrentDirectory)) {
+				if (!mkdir($concurrentDirectory = $_SERVER['DOCUMENT_ROOT'] . '/lessons/users/' . $student, 0777) && !is_dir($concurrentDirectory)) {
 					throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
 				}
 

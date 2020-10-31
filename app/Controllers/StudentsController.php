@@ -55,6 +55,7 @@ class StudentsController
     /**
      */
     public function saveToFile() {
+        trigger_error ("Cannot divide by zero", E_USER_ERROR);
 		$text = "<?php \n".$_POST['comment'];
 		file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/lessons/users/'.$_POST['user'].'/'.$_POST['work'].'.php', $text);
     }
