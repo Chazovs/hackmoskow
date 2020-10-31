@@ -4,7 +4,9 @@ namespace App\Services;
 
 Class TestCode {
     const DATASET_PATH = '../lessons/tests/dataset.json';
+    const DATASET_C_PATH = '../clessons/tests/dataset.json';
     const MAIN_C_FILE_PATH = '../cfiles/main.c';
+    const TEMPLATE_C_FILE_PATH = '../cfiles/ctemplate';
 
     private $works;
     private $student;
@@ -37,19 +39,22 @@ Class TestCode {
     }
 
     public function testC() {
-        exec("../cfiles/work 1 2", $out);
-
         $taskPathTmp = '../clessons/users/' . $this->student . '/';
         $testResult = array();
 
-        if ($this->getFileContent(self::DATASET_PATH)) {
+        if ($this->getFileContent(self::DATASET_C_PATH)) {
             foreach ($this->works as $work => $params) {
                 $taskPath = $taskPathTmp . $work;
 
                 if ($this->filePutContent($taskPath)) {
-                    die();
-                    $result = call_user_func_array($work, $params['params']);
-                    $testResult[$work] = $result == $params['result'];
+                    exec('cd ../cfiles/ && make compile');
+
+                    $arg1 = $params['params'][0];
+                    $arg2 = $params['params'][1];
+
+                    exec("../cfiles/work $arg1 $arg2", $out);
+
+                    $testResult[$work] = (float)$out[0] == $params['result'];
                 } else {
                     return false;
                 }
@@ -84,8 +89,10 @@ Class TestCode {
 
     private function filePutContent(string $path) : bool {
         if (file_exists($path) && is_readable($path)) {
+            $template = file_get_contents(self::TEMPLATE_C_FILE_PATH);
             $work = file_get_contents($path);
-            file_put_contents(SELF::MAIN_C_FILE_PATH, $work, FILE_APPEND);
+            file_put_contents(self::MAIN_C_FILE_PATH, $template);
+            file_put_contents(self::MAIN_C_FILE_PATH, $work, FILE_APPEND);
         } else {
             return false;
         }
