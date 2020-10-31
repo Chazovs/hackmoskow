@@ -15,5 +15,5 @@ Route::make('/download/lesson', 'GET', 'LessonController', 'downloadLesson');
 Route::make('/', 'GET', 'MainController', 'index');
 Route::make('/mbou4260/lesson/users', 'GET', 'StudentsController', 'listUsers');
 Route::make('/mbou4260/lesson/users/work', 'GET', 'StudentsController', 'viewUsers');
-Route::make('/mbou4260/lesson/users/work/send', 'POST', 'StudentsController', 'saveToFile');
+Route::make('/mbou4260/lesson/users/work/save', 'POST', 'StudentsController', 'saveToFile');
 

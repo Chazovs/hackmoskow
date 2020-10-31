@@ -33,42 +33,29 @@ class StudentsController
 
     /**
      */
-    public function viewUsers() {
+	public function viewUsers() {
 
-        $path = sprintf("%s/lessons/tests/legend.json", $_SERVER['DOCUMENT_ROOT']);
-        $legend = Student::file($path);
+		$path    = sprintf("%s/lessons/tests/legend.json", $_SERVER['DOCUMENT_ROOT']);
+		$legend  = json_decode(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/lessons/tests/legend.json'), true);
+		$dataset = json_decode(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/lessons/tests/dataset.json'), true);
 
-        $pathToDataset = sprintf("%s/lessons/tests/dataset.json", $_SERVER['DOCUMENT_ROOT']);
-        $dataset = file_get_contents($pathToDataset);
-        json_decode($dataset);
-
-        $datasetToSend = [];
-        foreach (json_decode($dataset) as $key=>$value) {
-
-            if ($key == $_GET['user']) {
-                foreach ($value as $i) {
-                    array_push($datasetToSend,$value);
-                    }
-                }
-            }
-
-
-        return View::create('user', ['legend'=>$legend,'datasetToSend' => $datasetToSend]);
-    }
+		$works = $dataset[$_GET['user']];
+		foreach ($works as $key => $work) {
+			if (isset($legend[$key])) {
+				$result[] = [
+					'work'   => $key,
+					'legend' => $legend[$key],
+					'user' => $_GET['user'],
+				];
+			}
+		}
+		return View::create('user', ['datasetToSend' => $result]);
+	}
 
     /**
      */
     public function saveToFile() {
-
-        if (isset($_POST['send'])) {
-            foreach ($_POST['send'] as $value) {
-//                for ($i = 1;)
-
-                $text = "<?php \n $value";
-                file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/lessons/users/Yra/work1.php', $text);
-            }
-        }
-
-
+		$text = "<?php \n".$_POST['comment'];
+		file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/lessons/users/'.$_POST['user'].'/'.$_POST['work'].'.php', $text);
     }
 }
