@@ -23,6 +23,6 @@
     <title>Students</title>
 </head>
 <body>
-
+<p> <?php var_dump($directoryis); ?></p>
 </body>
 </html>

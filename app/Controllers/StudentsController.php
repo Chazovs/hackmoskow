@@ -14,15 +14,28 @@ class StudentsController
     /**
      *
      */
-    public function add() {
+    public function listUsers() {
 
-        return View::create('addstudent', []);
+        $path = sprintf("%s/lessons/users", $_SERVER['DOCUMENT_ROOT']);
+        $directoryis = [];
+        if ($handle = opendir($path)) {
+            while (false !== ($directory = readdir($handle))) {
+                if ($directory != "." && $directory != "..") {
+                    array_push($directoryis, $directory);
+                }
+            }
+            closedir($handle);
+        }
+        //var_dump($directoryis);
+
+
+        return View::create('liststudent', ["directoryis" => "test"]);
     }
 
 //    /**
 //     * @return mixed
 //     */
-//    public function start() {
+//    public function searchusers() {
 // return ;
 //    }
 }
