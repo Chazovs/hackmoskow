@@ -9,3 +9,6 @@ Route::make('/mbou4260/lesson/get-js-test', 'GET', 'LessonController', 'getJsTes
 Route::make('/mbou4260/lesson/test', 'GET', 'LessonController', 'test');
 Route::make('/mbou4260/lesson/teacher/get/work', 'GET', 'LessonController', 'getWork');
 Route::make('/mbou4260/lesson/users', 'GET', 'StudentsController', 'listUsers');
+Route::make('/mbou4260/lesson/users/work', 'GET', 'StudentsController', 'viewUsers');
+Route::make('/mbou4260/lesson/users/work/send', 'POST', 'StudentsController', 'saveToFile');
+

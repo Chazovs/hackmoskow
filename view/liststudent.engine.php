@@ -23,6 +23,12 @@
     <title>Students</title>
 </head>
 <body>
-<p> <?php var_dump($directoryis); ?></p>
+<h2 style="text-align: center">Ученики</h2>
+<div class="list-group" style="width: 50%;padding-top: 5%;margin-left: auto;margin-right: auto">
+    <?php foreach ($directoryis as $user): ?>
+    <a href="/mbou4260/lesson/users/work?user=<?php echo $user;?>" class="list-group-item list-group-item-action list-group-item-info"><?echo $user;?></a>
+    <?php endforeach;?>
+</div>
+<p> </p>
 </body>
 </html>
