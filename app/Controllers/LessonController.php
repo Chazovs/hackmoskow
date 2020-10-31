@@ -50,17 +50,25 @@ class LessonController
 		return $this->addLessonFolders($result ?? []);
 	}
 
-	/**
-	 * @return mixed
-	 */
-	public function test() {
-		$student  = $_GET["student"];
-		$testCode = new TestCode($student);
-		var_dump($testCode->testPHP());
-		die();
+    /**
+     * @return mixed
+     */
+    public function test(){
+        $student = $_GET["student"];
+        $testCode = new TestCode($student);
 
-		return $testCode->testPHP();
-	}
+        return $testCode->testPHP();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function cTest(){
+        $student = $_GET["student"];
+        $testCode = new TestCode($student);
+
+        return $testCode->testC();
+    }
 
 	/**
 	 * @param array $result
@@ -73,6 +81,7 @@ class LessonController
 				if (!mkdir($concurrentDirectory = $_SERVER['DOCUMENT_ROOT'] . '/lessons/users/' . $student, 0700) && !is_dir($concurrentDirectory)) {
 					throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
 				}
+				file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/lessons/users/' . $student . '/index.php', '');
 			}
 		}
 		$users = array_slice(scandir($_SERVER['DOCUMENT_ROOT'] . '/lessons/users/'), 2);
