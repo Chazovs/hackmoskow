@@ -7,7 +7,7 @@ Class TestCode {
     const DATASET_C_PATH = '../clessons/tests/dataset.json';
     const MAIN_C_FILE_PATH = '../cfiles/main.c';
     const TEMPLATE_C_FILE_PATH = '../cfiles/ctemplate';
-    const ERROR_MSG = 'Ошибка выполнения программы';
+    const ERROR_MSG = 'ERROR';
 
     private $works;
     private $student;
